@@ -1,37 +1,53 @@
-// news-image-01 entry — "THE WORLD IN ONE DAY"
+// news-image-01 entry, round 2 — "ONE DAY, ONE PAGE"
 //
-// One poster that sums up the world news of Friday 13 November 2026:
-// six captioned panels under a single masthead — tankers hit in the
-// Strait of Hormuz, the Ukraine peace talks widening, Nvidia's CEO
-// resigning, the global Microsoft 365 outage, the court-approved
-// $1.2B Binance seizure, and Pope Leo meeting survivors in Peru.
+// A broadsheet front page that squeezes the whole of Friday
+// 13 November 2026 onto a single poster. Under the masthead
+// "ONE DAY, ONE PAGE" — flanked by the red kicker "ALL OF
+// FRIDAY · EVERY STORY REPORTED ON THE DAY" and a tally of
+// "24 STORIES · 5 CONTINENTS" — six feature stories carry
+// numbered red badges: (1) Iran says it struck a US radar in
+// Bahrain, the claim labelled unverified, while a tanker hits
+// a mine near Hormuz; (2) Europe joins the next Ukraine peace
+// talks, with the war's biggest prisoner swap in the works;
+// (3) Nvidia's CEO Jensen Huang resigns — and is summoned by
+// the Senate; (4) the Microsoft outage rolls into day two;
+// (5) a court clears the $1.2B Binance seizure; and (6) Pope
+// Leo's homecoming Mass in Peru. Below them, a section headed
+// "AND THE REST OF FRIDAY" runs eighteen more numbered
+// micro-stories — markets, climate, sport, science and more —
+// and a footer credits the day's sources: Reuters, AP, AFP,
+// Al Jazeera, BLS, UN News, the Vatican Press Office, ECDC,
+// the DOJ and NASA.
 //
-// The finished artwork ships in this repository as entry.png. The
-// bytes are JPEG; the competition gate tells PNG from JPEG by the
-// first bytes of the file, so the .png name is correct as it stands.
-// This program's only job is to deliver those exact bytes to the
-// output directory as entry.png, identically on every run.
+// The finished artwork ships in this repository as entry.png.
+// The bytes are JPEG; the competition gate tells PNG from JPEG
+// by the first bytes of the file, so the .png name is correct
+// as it stands. This program's only job is to deliver those
+// exact bytes to the output directory as entry.png, identically
+// on every run.
 
 import { copyFileSync, mkdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const repoDir = dirname(fileURLToPath(import.meta.url));
-const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+const here = dirname(fileURLToPath(import.meta.url));
+const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 
 // The harness prepares /output, but creating it here too means a
 // plain local run (node main.ts) works without any setup.
-mkdirSync(outputDir, { recursive: true });
+mkdirSync(outDir, { recursive: true });
 
-const dest = join(outputDir, "entry.png");
-copyFileSync(join(repoDir, "entry.png"), dest);
+const target = join(outDir, "entry.png");
+copyFileSync(join(here, "entry.png"), target);
 
-// Guard: the poster is a fixed, finished file. If the delivered bytes
-// ever differ in size from the artwork in this repository, fail loudly
-// instead of entering the wrong image.
-const POSTER_BYTES = 293945;
-const delivered = statSync(dest).size;
+// Guard: the poster is a fixed, finished file. If the delivered
+// bytes ever differ in size from the artwork in this repository,
+// fail loudly instead of entering the wrong image.
+const POSTER_BYTES = 270182;
+const delivered = statSync(target).size;
 if (delivered !== POSTER_BYTES) {
-  throw new Error(`poster size mismatch: delivered ${delivered}, expected ${POSTER_BYTES}`);
+  throw new Error(
+    `poster size mismatch: delivered ${delivered}, expected ${POSTER_BYTES}`,
+  );
 }
 console.log(`entry.png delivered: ${delivered} bytes`);
